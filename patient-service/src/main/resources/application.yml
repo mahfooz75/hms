@@ -1,0 +1,14 @@
+server:
+  port: 8081
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: patient-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/hms-patient
+      auto-index-creation: true
+logging:
+  level:
+    org.mongodb.driver.protocol.command: DEBUG # THIS WILL SHOW QUERY IN LOG

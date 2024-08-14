@@ -1,0 +1,15 @@
+server:
+  port: 8082
+spring:
+  main:
+    banner-mode: off
+  application:
+    name: doctor-service
+  data:
+    mongodb:
+      uri: mongodb://localhost:27017/hms-doctor
+      auto-index-creation: true
+logging:
+  level:
+#    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
+    org.mongodb.driver.protocol.command: DEBUG # THIS WILL SHOW QUERY IN LOG
