@@ -9,6 +9,15 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/hms-patient
       auto-index-creation: true
+    redis:
+      host: localhost           # Use host:DESKTOP-F0JD010 for remote redis
+      port: 6379
+      lettuce:
+        pool:
+          max-active: 8           # Maximum number of connections in the pool
+          max-idle: 8             # Maximum number of idle connections in the pool
+          min-idle: 0             # Minimum number of idle connections in the pool
+          max-wait: 10s           # Maximum time to wait for a connection (in milliseconds)
 logging:
   level:
     org.mongodb.driver.protocol.command: DEBUG # THIS WILL SHOW QUERY IN LOG

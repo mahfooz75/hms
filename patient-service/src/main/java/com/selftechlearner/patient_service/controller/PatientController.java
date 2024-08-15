@@ -2,6 +2,7 @@ package com.selftechlearner.patient_service.controller;
 
 import com.selftechlearner.patient_service.dto.PatientRequestDto;
 import com.selftechlearner.patient_service.dto.PatientResponseDto;
+import com.selftechlearner.patient_service.exception.PatientException;
 import com.selftechlearner.patient_service.service.PatientService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -35,7 +36,11 @@ public class PatientController {
 
     @GetMapping
     public ResponseEntity<List<PatientResponseDto>> getPatients() {
-        return ResponseEntity.status(HttpStatus.OK).body(patientService.getAllPatients());
+        try{
+            return ResponseEntity.status(HttpStatus.OK).body(patientService.getAllPatients());
+        }catch (Exception e){
+            throw new PatientException(e.getMessage());
+        }
     }
 
     @GetMapping("/{patientId}")

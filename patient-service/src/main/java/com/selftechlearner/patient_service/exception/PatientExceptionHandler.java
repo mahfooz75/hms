@@ -19,4 +19,13 @@ public class PatientExceptionHandler {
         problemDetail.setTitle(ex.getMessage());
         return new ResponseEntity<>(problemDetail, HttpStatus.NOT_FOUND);
     }
+
+    @ExceptionHandler(PatientException.class)
+    public ResponseEntity<ProblemDetail> onException(PatientException ex, HttpServletRequest request) {
+        ProblemDetail problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR, ex.getMessage());
+        String requestURL = request.getRequestURL().toString();
+        problemDetail.setType(URI.create(requestURL));
+        problemDetail.setTitle(ex.getMessage());
+        return new ResponseEntity<>(problemDetail, HttpStatus.INTERNAL_SERVER_ERROR);
+    }
 }

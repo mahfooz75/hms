@@ -4,13 +4,15 @@ import com.selftechlearner.patient_service.dto.MedicalHistoryDto;
 import com.selftechlearner.patient_service.dto.PatientRequestDto;
 import com.selftechlearner.patient_service.dto.PatientResponseDto;
 import com.selftechlearner.patient_service.entity.Patient;
+import com.selftechlearner.patient_service.exception.ExceptionMessage;
 import com.selftechlearner.patient_service.exception.PatientNotFoundException;
 import com.selftechlearner.patient_service.mapper.MedicalHistoryMapper;
 import com.selftechlearner.patient_service.mapper.PatientMapper;
 import com.selftechlearner.patient_service.repository.PatientRepository;
 import com.selftechlearner.patient_service.service.PatientService;
-import com.selftechlearner.patient_service.exception.ExceptionMessage;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,6 +34,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @Cacheable(value = "patients")
     public List<PatientResponseDto> getAllPatients() {
         return patientMapper.toResponseDtoList(patientRepository.findBySoftDeletedFalseOrderByCreatedAtDesc());
     }
@@ -43,6 +46,7 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    @CacheEvict(value = "patients", allEntries = true)
     public PatientResponseDto updatePatient(String patientId, PatientRequestDto patientRequestDto) {
         Patient patient = patientRepository.findByPatientIdAndSoftDeletedFalse(patientId).orElseThrow(() -> new PatientNotFoundException(ExceptionMessage.PATIENT_NOT_FOUND));
         Set<MedicalHistoryDto> existingMedicalHistoryDtos = medicalHistoryMapper.toDto(patient.getMedicalHistory());
