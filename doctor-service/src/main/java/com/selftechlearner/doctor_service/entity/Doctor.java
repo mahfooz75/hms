@@ -1,6 +1,7 @@
 package com.selftechlearner.doctor_service.entity;
 
 import com.selftechlearner.doctor_service.audit.Auditable;
+import com.selftechlearner.doctor_service.util.Availability;
 import com.selftechlearner.doctor_service.util.DoctorConstant;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -12,6 +13,7 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Getter
 @Setter
@@ -27,8 +29,13 @@ public class Doctor extends Auditable<String> implements Serializable {
     private String firstName;
     private String lastName;
     private String specialty;
+    private String qualifications;
+    private Integer experience;
     private String email;
     private String phoneNumber;
     private String department;
+    private Availability availability; // Enum to represent availability status
+    private List<Shift> shifts; // List of shifts for the doctor
+    private List<Consultation> consultations;
     private boolean softDeleted;
 }
