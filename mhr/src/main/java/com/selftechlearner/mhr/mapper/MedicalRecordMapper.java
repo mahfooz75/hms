@@ -18,7 +18,7 @@ public interface MedicalRecordMapper {
     MedicalRecordRequestDto toDto(MedicalRecordRequest medicalRecordRequest);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "recordId", ignore = true)
+    @Mapping(target = "medicalRecordId", ignore = true)
     @Mapping(target = "softDeleted", ignore = true)
     MedicalRecord toEntity(MedicalRecordRequestDto medicalRecordRequestDto);
 
@@ -27,7 +27,7 @@ public interface MedicalRecordMapper {
     List<MedicalRecordResponse> toResponse(List<MedicalRecord> medicalRecord);
 
     @Mapping(target = "id", ignore = true)
-    @Mapping(target = "recordId", ignore = true)
+    @Mapping(target = "medicalRecordId", ignore = true)
     @Mapping(target = "softDeleted", ignore = true)
     @Mapping(target = "createdBy", ignore = true)
     @Mapping(target = "createdAt", ignore = true)

@@ -14,7 +14,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Builder
 public class MedicalRecordResponse {
-    private String recordId;
+    private String medicalRecordId;
     private String patientId;
     private String doctorId;
     private LocalDate dateOfVisit;

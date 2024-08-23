@@ -12,5 +12,5 @@ public interface MedicalHealthRecordRepository extends MongoRepository<MedicalRe
 
     List<MedicalRecord> findByPatientIdAndSoftDeletedFalseOrderByCreatedAtDesc(String patientId);
 
-    Optional<MedicalRecord> findByRecordIdAndSoftDeletedFalse(String recordId);
+    Optional<MedicalRecord> findByMedicalRecordIdAndSoftDeletedFalse(String medicalRecordId);
 }

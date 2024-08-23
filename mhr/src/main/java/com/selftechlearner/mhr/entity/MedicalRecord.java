@@ -24,7 +24,7 @@ public class MedicalRecord extends Auditable<String> implements Serializable {
     @Id
     private String id;
     @Indexed(unique = true)
-    private String recordId;
+    private String medicalRecordId;
     private String patientId;
     private String doctorId;
     private LocalDate dateOfVisit;

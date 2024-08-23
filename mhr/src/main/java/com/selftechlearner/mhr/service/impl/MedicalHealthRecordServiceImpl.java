@@ -39,20 +39,20 @@ public class MedicalHealthRecordServiceImpl implements MedicalHealthRecordServic
     @Transactional
     public ApiResponse addMedicalRecord(MedicalRecordRequestDto medicalRecordRequestDto) {
         MedicalRecord medicalRecord = medicalRecordMapper.toEntity(medicalRecordRequestDto);
-        medicalRecord.setRecordId(UUID.randomUUID().toString());
+        medicalRecord.setMedicalRecordId(UUID.randomUUID().toString());
         medicalRecord = medicalHealthRecordRepository.save(medicalRecord);
 
         MedicalRecordResponse medicalRecordResponse = medicalRecordMapper.toResponse(medicalRecord);
 
         PrescriptionRequest prescriptionRequest = PrescriptionRequest.builder()
-                .medicalRecordId(medicalRecordResponse.getRecordId())
+                .medicalRecordId(medicalRecordResponse.getMedicalRecordId())
                 .build();
         Prescription prescription = prescriptionMapper.toEntity(prescriptionRequest);
         prescription.setPrescriptionId(UUID.randomUUID().toString());
         prescriptionRepository.save(prescription);
 
         LabResultRequest labResultRequest = LabResultRequest.builder()
-                .medicalRecordId(medicalRecordResponse.getRecordId())
+                .medicalRecordId(medicalRecordResponse.getMedicalRecordId())
                 .build();
         LabResult labResult = labResultMapper.toEntity(labResultRequest);
         labResult.setLabResultId(UUID.randomUUID().toString());
@@ -63,7 +63,7 @@ public class MedicalHealthRecordServiceImpl implements MedicalHealthRecordServic
 
     @Override
     public ApiResponse getMedicalRecord(String recordId) {
-        MedicalRecord medicalRecord = medicalHealthRecordRepository.findByRecordIdAndSoftDeletedFalse(recordId)
+        MedicalRecord medicalRecord = medicalHealthRecordRepository.findByMedicalRecordIdAndSoftDeletedFalse(recordId)
                 .orElseThrow(() -> new RecordNotFoundException(ExceptionMessage.MEDICAL_RECORD_NOT_FOUND + recordId));
         return MedicalHealthRecordUtil.createSuccessMedicalHealthResponse(medicalRecordMapper.toResponse(medicalRecord), MedicalHealthRecordUtil.SUCCESS);
     }
@@ -79,7 +79,7 @@ public class MedicalHealthRecordServiceImpl implements MedicalHealthRecordServic
 
     @Override
     public ApiResponse updateMedicalRecord(String recordId, MedicalRecordRequestDto recordRequestDto) {
-        MedicalRecord medicalRecord = medicalHealthRecordRepository.findByRecordIdAndSoftDeletedFalse(recordId)
+        MedicalRecord medicalRecord = medicalHealthRecordRepository.findByMedicalRecordIdAndSoftDeletedFalse(recordId)
                 .orElseThrow(() -> new RecordNotFoundException(ExceptionMessage.MEDICAL_RECORD_NOT_FOUND + recordId));
         medicalRecordMapper.updateEntityFromDto(recordRequestDto, medicalRecord);
         medicalRecord = medicalHealthRecordRepository.save(medicalRecord);
@@ -88,7 +88,7 @@ public class MedicalHealthRecordServiceImpl implements MedicalHealthRecordServic
 
     @Override
     public ApiResponse deleteMedicalRecord(String recordId) {
-        MedicalRecord medicalRecord = medicalHealthRecordRepository.findByRecordIdAndSoftDeletedFalse(recordId)
+        MedicalRecord medicalRecord = medicalHealthRecordRepository.findByMedicalRecordIdAndSoftDeletedFalse(recordId)
                 .orElseThrow(() -> new RecordNotFoundException(ExceptionMessage.MEDICAL_RECORD_NOT_FOUND + recordId));
         medicalRecord.setSoftDeleted(true);
         medicalHealthRecordRepository.save(medicalRecord);
