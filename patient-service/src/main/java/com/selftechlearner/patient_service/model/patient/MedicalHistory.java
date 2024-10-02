@@ -1,4 +1,4 @@
-package com.selftechlearner.patient_service.entity;
+package com.selftechlearner.patient_service.model.patient;
 
 import java.io.Serializable;
 import java.time.LocalDate;

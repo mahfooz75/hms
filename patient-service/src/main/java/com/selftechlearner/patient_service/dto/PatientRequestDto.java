@@ -1,5 +1,9 @@
 package com.selftechlearner.patient_service.dto;
 
+import com.selftechlearner.patient_service.model.patient.Address;
+import com.selftechlearner.patient_service.model.patient.ContactInformation;
+import com.selftechlearner.patient_service.model.patient.EmergencyContact;
+import com.selftechlearner.patient_service.model.patient.MedicalHistory;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -19,8 +23,8 @@ public class PatientRequestDto {
     private String lastName;
     private LocalDate dateOfBirth;
     private String gender;
-    private ContactInformationDto contactInformation;
-    private AddressDto address;
-    private EmergencyContactDto emergencyContact;
-    private Set<MedicalHistoryDto> medicalHistory;
+    private ContactInformation contactInformation;
+    private Address address;
+    private EmergencyContact emergencyContact;
+    private Set<MedicalHistory> medicalHistory;
 }

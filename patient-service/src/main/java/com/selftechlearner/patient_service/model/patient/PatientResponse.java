@@ -1,4 +1,4 @@
-package com.selftechlearner.patient_service.dto;
+package com.selftechlearner.patient_service.model.patient;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,15 +14,15 @@ import java.util.Set;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PatientResponseDto {
+public class PatientResponse {
     private String id;
     private String patientId;
     private String firstName;
     private String lastName;
     private LocalDate dateOfBirth;
     private String gender;
-    private ContactInformationDto contactInformation;
-    private AddressDto address;
-    private EmergencyContactDto emergencyContact;
-    private Set<MedicalHistoryDto> medicalHistory;
+    private ContactInformation contactInformation;
+    private Address address;
+    private EmergencyContact emergencyContact;
+    private Set<MedicalHistory> medicalHistory;
 }

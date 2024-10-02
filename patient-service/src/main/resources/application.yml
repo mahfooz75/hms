@@ -1,5 +1,5 @@
-server:
-  port: 8081
+#server:
+#  port: 8081
 spring:
   main:
     banner-mode: off
@@ -7,11 +7,10 @@ spring:
     name: patient-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/hms-patient
+      uri: ${mongoDbConnectionURI}/hms-patient
       auto-index-creation: true
     redis:
-      host: localhost           # Use host:DESKTOP-F0JD010 for remote redis
-      port: 6379
+      url: rediss://${redisUserName}:${redisPassword}@${redisServer}:22321
       lettuce:
         pool:
           max-active: 8           # Maximum number of connections in the pool
@@ -21,3 +20,28 @@ spring:
 logging:
   level:
     org.mongodb.driver.protocol.command: DEBUG # THIS WILL SHOW QUERY IN LOG
+
+eureka:
+  client:
+    register-with-eureka: true # Whether this service should register itself with Eureka
+    fetch-registry: true # Whether to fetch the registry information from Eureka server
+    service-url:
+      defaultZone: http://localhost:8761/eureka # The URL of the Eureka server
+    registry-fetch-interval-seconds: 30 # How often (in seconds) the Eureka client fetches the registry from the server.
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}:${random.value}  # A unique instance ID
+    lease-renewal-interval-in-seconds: 30 # Frequency of heartbeats to Eureka server (default: 30)
+    lease-expiration-duration-in-seconds: 90 # Time in seconds that Eureka waits before removing a service from the registry (default: 90)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      enabled: true
+    info:
+      enabled: true
+    env:
+      enabled: true

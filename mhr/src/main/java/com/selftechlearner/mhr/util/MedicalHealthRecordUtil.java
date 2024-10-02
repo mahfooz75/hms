@@ -10,7 +10,7 @@ public class MedicalHealthRecordUtil {
     public ApiResponse createSuccessMedicalHealthResponse(Object data, String message) {
         return ApiResponse.builder()
                 .status(SUCCESS)
-                .data(data)
+                .medicalHealthRecord(data)
                 .message(message)
                 .build();
     }
@@ -18,7 +18,7 @@ public class MedicalHealthRecordUtil {
     public ApiResponse createFailureMedicalHealthResponse(Object data, String message) {
         return ApiResponse.builder()
                 .status(FAIL)
-                .data(data)
+                .medicalHealthRecord(data)
                 .message(message)
                 .build();
     }

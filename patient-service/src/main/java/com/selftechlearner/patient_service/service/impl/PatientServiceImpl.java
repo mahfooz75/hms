@@ -1,12 +1,12 @@
 package com.selftechlearner.patient_service.service.impl;
 
-import com.selftechlearner.patient_service.dto.MedicalHistoryDto;
+import com.selftechlearner.patient_service.adapter.DoctorAdapter;
+import com.selftechlearner.patient_service.model.doctor.DoctorDetailsResponse;
 import com.selftechlearner.patient_service.dto.PatientRequestDto;
-import com.selftechlearner.patient_service.dto.PatientResponseDto;
+import com.selftechlearner.patient_service.model.patient.PatientResponse;
 import com.selftechlearner.patient_service.entity.Patient;
 import com.selftechlearner.patient_service.exception.ExceptionMessage;
 import com.selftechlearner.patient_service.exception.PatientNotFoundException;
-import com.selftechlearner.patient_service.mapper.MedicalHistoryMapper;
 import com.selftechlearner.patient_service.mapper.PatientMapper;
 import com.selftechlearner.patient_service.repository.PatientRepository;
 import com.selftechlearner.patient_service.service.PatientService;
@@ -16,7 +16,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Set;
+import java.util.Map;
 import java.util.UUID;
 
 @Service
@@ -24,10 +24,10 @@ import java.util.UUID;
 public class PatientServiceImpl implements PatientService {
     private final PatientRepository patientRepository;
     private final PatientMapper patientMapper;
-    private final MedicalHistoryMapper medicalHistoryMapper;
+    private final DoctorAdapter doctorAdapter;
 
     @Override
-    public PatientResponseDto createPatient(PatientRequestDto patientRequestDto) {
+    public PatientResponse createPatient(PatientRequestDto patientRequestDto) {
         Patient patient = patientMapper.toEntity(patientRequestDto);
         patient.setPatientId(UUID.randomUUID().toString());
         return patientMapper.toResponseDto(patientRepository.save(patient));
@@ -35,25 +35,20 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     @Cacheable(value = "patients")
-    public List<PatientResponseDto> getAllPatients() {
+    public List<PatientResponse> getAllPatients() {
         return patientMapper.toResponseDtoList(patientRepository.findBySoftDeletedFalseOrderByCreatedAtDesc());
     }
 
     @Override
-    public PatientResponseDto getPatientById(String patientId) {
+    public PatientResponse getPatientById(String patientId) {
         Patient patient = patientRepository.findByPatientIdAndSoftDeletedFalse(patientId).orElseThrow(() -> new PatientNotFoundException(ExceptionMessage.PATIENT_NOT_FOUND));
         return patientMapper.toResponseDto(patient);
     }
 
     @Override
     @CacheEvict(value = "patients", allEntries = true)
-    public PatientResponseDto updatePatient(String patientId, PatientRequestDto patientRequestDto) {
+    public PatientResponse updatePatient(String patientId, PatientRequestDto patientRequestDto) {
         Patient patient = patientRepository.findByPatientIdAndSoftDeletedFalse(patientId).orElseThrow(() -> new PatientNotFoundException(ExceptionMessage.PATIENT_NOT_FOUND));
-        Set<MedicalHistoryDto> existingMedicalHistoryDtos = medicalHistoryMapper.toDto(patient.getMedicalHistory());
-        if (!existingMedicalHistoryDtos.isEmpty() && !existingMedicalHistoryDtos.containsAll(patientRequestDto.getMedicalHistory())) {
-            patientRequestDto.getMedicalHistory().removeAll(existingMedicalHistoryDtos);
-            patientRequestDto.getMedicalHistory().addAll(existingMedicalHistoryDtos);
-        }
         patientMapper.updateEntityFromDto(patientRequestDto, patient);
         patient = patientRepository.save(patient);
         return patientMapper.toResponseDto(patient);
@@ -68,12 +63,18 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public List<PatientResponseDto> createMultiplePatient(List<PatientRequestDto> patientRequestDtos) {
+    public List<PatientResponse> createMultiplePatient(List<PatientRequestDto> patientRequestDtos) {
         List<Patient> patients = patientRequestDtos.stream().map(x -> {
             Patient patient = patientMapper.toEntity(x);
             patient.setPatientId(UUID.randomUUID().toString());
             return patient;
         }).toList();
         return patientMapper.toResponseDtoList(patientRepository.saveAll(patients));
+    }
+
+    @Override
+    @Cacheable(value = "doctorsInfo")
+    public Map<String, List<DoctorDetailsResponse>> getAppointment(String patientId) {
+        return doctorAdapter.getDoctorInfo();
     }
 }

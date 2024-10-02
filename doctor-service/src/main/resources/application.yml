@@ -1,5 +1,5 @@
-server:
-  port: 8082
+#server:
+#  port: 7081
 spring:
   main:
     banner-mode: off
@@ -7,9 +7,20 @@ spring:
     name: doctor-service
   data:
     mongodb:
-      uri: mongodb://localhost:27017/hms-doctor
+      uri: ${mongoDbConnectionURI}/hms-doctor
       auto-index-creation: true
 logging:
   level:
 #    org.springframework.data.mongodb.core.MongoTemplate: DEBUG
     org.mongodb.driver.protocol.command: DEBUG # THIS WILL SHOW QUERY IN LOG
+eureka:
+  client:
+    register-with-eureka: true # Whether this service should register itself with Eureka
+    fetch-registry: true # Whether to fetch the registry information from Eureka server
+    service-url:
+      defaultZone: http://localhost:8761/eureka # The URL of the Eureka server
+  instance:
+    hostname: localhost
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}  # A unique instance ID
+    lease-renewal-interval-in-seconds: 30 # Frequency of heartbeats to Eureka server (default: 30)
+    lease-expiration-duration-in-seconds: 90 # Time in seconds that Eureka waits before removing a service from the registry (default: 90)

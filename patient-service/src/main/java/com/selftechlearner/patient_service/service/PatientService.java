@@ -1,21 +1,25 @@
 package com.selftechlearner.patient_service.service;
 
+import com.selftechlearner.patient_service.model.doctor.DoctorDetailsResponse;
 import com.selftechlearner.patient_service.dto.PatientRequestDto;
-import com.selftechlearner.patient_service.dto.PatientResponseDto;
+import com.selftechlearner.patient_service.model.patient.PatientResponse;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PatientService {
 
-    PatientResponseDto createPatient(PatientRequestDto patientRequestDto);
+    PatientResponse createPatient(PatientRequestDto patientRequestDto);
 
-    List<PatientResponseDto> getAllPatients();
+    List<PatientResponse> getAllPatients();
 
-    PatientResponseDto getPatientById(String patientId);
+    PatientResponse getPatientById(String patientId);
 
-    PatientResponseDto updatePatient(String patientId, PatientRequestDto patientRequestDto);
+    PatientResponse updatePatient(String patientId, PatientRequestDto patientRequestDto);
 
     void deletePatient(String patientId);
 
-    List<PatientResponseDto> createMultiplePatient(List<PatientRequestDto> patientRequestDtos);
+    List<PatientResponse> createMultiplePatient(List<PatientRequestDto> patientRequestDtos);
+
+    Map<String, List<DoctorDetailsResponse>> getAppointment(String patientId);
 }

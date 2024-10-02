@@ -1,6 +1,10 @@
 package com.selftechlearner.patient_service.entity;
 
 import com.selftechlearner.patient_service.audit.Auditable;
+import com.selftechlearner.patient_service.model.patient.Address;
+import com.selftechlearner.patient_service.model.patient.ContactInformation;
+import com.selftechlearner.patient_service.model.patient.EmergencyContact;
+import com.selftechlearner.patient_service.model.patient.MedicalHistory;
 import com.selftechlearner.patient_service.util.GENDER;
 import com.selftechlearner.patient_service.util.PatientConstant;
 import lombok.AllArgsConstructor;
