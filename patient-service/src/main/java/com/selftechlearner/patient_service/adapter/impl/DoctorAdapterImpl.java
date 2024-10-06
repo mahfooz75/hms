@@ -1,6 +1,7 @@
 package com.selftechlearner.patient_service.adapter.impl;
 
 import com.selftechlearner.patient_service.adapter.DoctorAdapter;
+import com.selftechlearner.patient_service.config.DoctorServiceConfig;
 import com.selftechlearner.patient_service.model.doctor.DoctorDetailsResponse;
 import com.selftechlearner.patient_service.dto.DoctorResponseDto;
 import com.selftechlearner.patient_service.mapper.PatientMapper;
@@ -20,11 +21,12 @@ import java.util.Map;
 public class DoctorAdapterImpl implements DoctorAdapter {
     private final RestClient.Builder restClientBuilder;
     private final PatientMapper patientMapper;
+    private final DoctorServiceConfig doctorServiceConfig;
     private RestClient restClient;
 
     @PostConstruct
     public void init() {
-        restClient = restClientBuilder.baseUrl("http://doctor-service/doctors")
+        restClient = restClientBuilder.baseUrl(doctorServiceConfig.getBaseUrl())
                 .defaultHeader("Accept", "application/json")
                 .defaultHeader("Content-Type", "application/json")
                 .build();

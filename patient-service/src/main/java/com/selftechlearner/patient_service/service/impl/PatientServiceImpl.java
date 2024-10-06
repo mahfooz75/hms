@@ -34,6 +34,16 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
+    public List<PatientResponse> createPatient(List<PatientRequestDto> patientRequestDtos) {
+        List<Patient> patients = patientRequestDtos.stream().map(x -> {
+            Patient patient = patientMapper.toEntity(x);
+            patient.setPatientId(UUID.randomUUID().toString());
+            return patient;
+        }).toList();
+        return patientMapper.toResponseDtoList(patientRepository.saveAll(patients));
+    }
+
+    @Override
     @Cacheable(value = "patients")
     public List<PatientResponse> getAllPatients() {
         return patientMapper.toResponseDtoList(patientRepository.findBySoftDeletedFalseOrderByCreatedAtDesc());
@@ -62,15 +72,7 @@ public class PatientServiceImpl implements PatientService {
         patientRepository.save(patient);
     }
 
-    @Override
-    public List<PatientResponse> createMultiplePatient(List<PatientRequestDto> patientRequestDtos) {
-        List<Patient> patients = patientRequestDtos.stream().map(x -> {
-            Patient patient = patientMapper.toEntity(x);
-            patient.setPatientId(UUID.randomUUID().toString());
-            return patient;
-        }).toList();
-        return patientMapper.toResponseDtoList(patientRepository.saveAll(patients));
-    }
+
 
     @Override
     @Cacheable(value = "doctorsInfo")

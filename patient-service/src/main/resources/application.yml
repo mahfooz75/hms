@@ -45,3 +45,7 @@ management:
       enabled: true
     env:
       enabled: true
+
+doctor:
+  service:
+    base-url: http://doctor-service/doctor

@@ -21,7 +21,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/patients")
+@RequestMapping("/patient")
 @RequiredArgsConstructor
 public class PatientController {
     private final PatientService patientService;
@@ -33,7 +33,7 @@ public class PatientController {
 
     @PostMapping("/all")
     public ResponseEntity<List<PatientResponse>> createMultiplePatient(@RequestBody List<PatientRequestDto> patientRequestDtos) {
-        return ResponseEntity.status(HttpStatus.CREATED).body(patientService.createMultiplePatient(patientRequestDtos));
+        return ResponseEntity.status(HttpStatus.CREATED).body(patientService.createPatient(patientRequestDtos));
     }
 
     @GetMapping
